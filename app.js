@@ -1,32 +1,27 @@
-const input = require('./input.json');
-
-// Доступные модификаторы
-const mode = {
-    default() {
-        return [].concat(this.day, this.night);
-    }, 
-    day: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    night: [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]
-}
-
-// Возвращает среднее значение массива
-const median = values => values.sort((a, b) => a - b)[values.length / 2 | 0];
-
-// Возвращает список часов в промежутке from..to
-function createHourList (from, to) {
-    const res = []
-    if (from > to) {
-        to += 24;
+module.exports.manager = input => {
+    // Доступные модификаторы
+    const mode = {
+        default () {
+            return [].concat(this.day, this.night);
+        },
+        day: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        night: [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]
     }
 
-    for (let hour = from; hour < to; hour++) {
-        res.push(hour > 23 ? hour - 24 : hour);
-    } 
+    // Возвращает список часов в промежутке from..to
+    function createHourList(from, to) {
+        const res = []
+        if (from > to) {
+            to += 24;
+        }
 
-    return res;
-}
+        for (let hour = from; hour < to; hour++) {
+            res.push(hour > 23 ? hour - 24 : hour);
+        }
 
-function manager (input) {
+        return res;
+    }
+
     const { devices } = input;
 
     // Сортировка по мощности
@@ -62,10 +57,6 @@ function manager (input) {
     input.rates.forEach(rate => 
         createHourList(rate.from, rate.to).forEach(hour => rates[hour] = rate.value)
     )
-    
-    // Средние значения для стоимости и потребляемой энергии
-    const midValue = median([...rates]); // Чтобы не сорировать массив тарифов
-    const midPower = input.maxPower / 2;
 
     // Добавляет в результат нужные девайсы (на конкретный час)
     function addDevice(device, hour, value) {

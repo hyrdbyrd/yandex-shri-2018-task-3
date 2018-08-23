@@ -1,0 +1,10 @@
+{
+    "name": "yandex-shri-2018-task-3",
+    "version": "1.0.0",
+    "scripts": {
+        "test": "mocha *.test.js"
+    },
+    "devDependencies": {
+        "mocha": "^5.2.0"
+    }
+}
